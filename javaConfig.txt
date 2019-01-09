@@ -1,1 +1,2 @@
 gitAppRepo=https://github.com/manju1101/demo-java-1.git
+manju=test

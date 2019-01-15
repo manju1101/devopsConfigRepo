@@ -1,0 +1,18 @@
+def extcode
+
+node{
+    def pipelineProp
+    def utilProp
+        stage('Pull Config file'){
+        
+        def branchToCheckOut = "master";
+        def credentials = "cf6edfe6-5dc7-4bbf-b4f5-491e8e83b22b";
+        def configRepo = "https://github.com/manju1101/devopsConfigRepo.git";
+        def fileLocation = "./Properties/JenkinsFile.properties";
+        
+                
+        pullProperties(branchToCheckOut, credentials, configRepo, fileLocation);
+        }
+        
+
+}

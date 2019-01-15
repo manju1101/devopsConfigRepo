@@ -43,4 +43,8 @@ node{
     //   archiveArtifacts 'target/*.jar'
             }
         }
+        
+        stage('deploy tomcat') { 
+            sh 'sudo cp /var/lib/jenkins/workspace/EndToEndPipeline/target/*.war /opt/tomcat/webapps/'
+            }
     }

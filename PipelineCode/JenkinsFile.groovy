@@ -51,14 +51,10 @@ node{
     
     node {
           try {
-              notifySuccessful(){
-                  reUsableFun.triggerEmail()
-              }
+              reUsableFun.triggerEmail()
           } catch (e) {
             currentBuild.result = "FAILED"
-              notifyFailed(){
-                  reUsableFun.triggerEmail()
-              }
+              reUsableFun.triggerEmail()
             throw e
           }
     }

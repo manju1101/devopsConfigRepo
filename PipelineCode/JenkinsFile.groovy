@@ -1,4 +1,5 @@
 def extcode
+def reUsableFun
 
 node{
     def pipelineProp
@@ -18,6 +19,7 @@ node{
                 url: 'https://github.com/manju1101/DevopsUtilRepo.git'
 
                 utilProp = readProperties  file: './LinuxSystem/shellCommands.groovy'
+                reUsableFun = readProperties  file: 'LinuxSystem/reUsableScripts.groovy'
                 println utilProp['MVN_CLEAR_PACKAGE']
                 println utilProp['MVN_CLEAR_PACKAGE'] +" "+pipelineProp['SOANR_BUILD']
         }
@@ -37,14 +39,42 @@ node{
                 withSonarQubeEnv('SonarNameInJenkins') {
                     // sh "${scannerHome}/bin/sonar-scanner"
                     sh utilProp['MVN_CLEAR_PACKAGE']+" "+pipelineProp['SOANR_BUILD']
-                    // sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
-                    // sh 'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
                 }
     //   archiveArtifacts 'target/*.jar'
             }
         }
         
-        stage('deploy tomcat') { 
+        /*stage('deploy tomcat') { 
             sh 'sudo cp /var/lib/jenkins/workspace/EndToEndPipeline/target/*.war /opt/tomcat/webapps/'
-            }
+            }*/
     }
+    
+    node {
+          try {
+              notifySuccessful(){
+                  reUsableFun.triggerEmail()
+              }
+          } catch (e) {
+            currentBuild.result = "FAILED"
+              notifyFailed(){
+                  reUsableFun.triggerEmail()
+              }
+            throw e
+          }
+    }
+    
+    
+    
+    
+    
+    
+    /*post {
+            always {
+                echo 'I will always say Hello again!'
+                
+                emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+                    recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+                    subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
+                
+            }
+        }*/

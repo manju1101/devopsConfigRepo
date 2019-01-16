@@ -55,7 +55,6 @@ node{
           } catch (e) {
             currentBuild.result = "FAILED"
               reUsableFun.triggerEmail()
-            throw e
           }
     }
     

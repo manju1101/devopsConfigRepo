@@ -1,5 +1,4 @@
 def extcode
-def reUsableFun
 
 node{
     def pipelineProp
@@ -19,7 +18,6 @@ node{
                 url: 'https://github.com/manju1101/DevopsUtilRepo.git'
 
                 utilProp = readProperties  file: './LinuxSystem/shellCommands.groovy'
-                reUsableFun = readProperties  file: 'LinuxSystem/reUsableScripts.groovy'
                 println utilProp['MVN_CLEAR_PACKAGE']
                 println utilProp['MVN_CLEAR_PACKAGE'] +" "+pipelineProp['SOANR_BUILD']
         }
@@ -51,25 +49,26 @@ node{
     
     node {
           try {
-              reUsableFun.triggerEmail()
+              notifySuccessful()
           } catch (e) {
             currentBuild.result = "FAILED"
-              reUsableFun.triggerEmail()
+            notifyFailed()
+            throw e
           }
     }
-    
-    
-    
-    
-    
-    
-    /*post {
-            always {
-                echo 'I will always say Hello again!'
-                
-                emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+ 
+def notifySuccessful() {
+
+  emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
                     recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
                     subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
-                
-            }
-        }*/
+}
+
+ 
+def notifyFailed() {
+  emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+                    recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+                    subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
+}
+    
+    

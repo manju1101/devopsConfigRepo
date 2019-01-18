@@ -1,5 +1,7 @@
 def checkOutRepo(String repo, String branch, String credentials){
-    git repo, branch, credentials
+    git url: repo, 
+        branch: branch, 
+        credentialsId: credentials
 }
 
 return this
